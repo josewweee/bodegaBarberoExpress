@@ -1,0 +1,63 @@
+<!--
+  Generated template for the ListaGeneralProductosPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>ARTÍCULOS EN BODEGA</ion-title>         
+    <ion-buttons end>
+      <button ion-button (click)="crearProducto()">
+          <ion-icon name="add"></ion-icon>
+      </button>    
+  </ion-buttons>       
+  </ion-navbar>
+  <ion-list style="height: 10px; " start>
+    <ion-item color="primary" >
+      <ion-label>SELECCIONA CATEGORÍA</ion-label>
+      <ion-select [(ngModel)]="catego" (ngModelChange)="cambioTipo($event)">                                  
+        <ion-option *ngFor="let tipo of tipos">{{tipo.text}}</ion-option>                                      
+      </ion-select>
+    </ion-item>
+</ion-list> 
+  <div class="searchBoxContainer" color="primary">
+    <ion-input type="search" id="searchField" placeholder="Busca el producto que deseas..." [(ngModel)]="query" (ngModelChange)="cambioLista($event)"></ion-input>
+  </div>     
+</ion-header>
+
+
+<ion-content [ngStyle]="{'border':getBorder()}">
+  <ion-grid>
+      <ion-row>
+        <ion-col  col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 *ngFor="let producto of items | search: query | types: catego">
+            <ion-card>
+                <img (click)="irAVistaDeDetalleProducto(producto)" style="background-size: cover; width: 150px; height: 150px; display: block; margin:auto;" src="{{producto.foto}}"/>
+                <ion-card-content>
+                  <ion-card-title (click)="irAVistaDeDetalleProducto(producto)" style="text-transform: uppercase; height: 70px; text-align: center;">
+                    <h6>{{producto.nombre}}</h6>
+                      
+                  </ion-card-title>
+                  <p  (click)="irAVistaDeDetalleProducto(producto)" style="text-align: center;">
+                      ${{producto.precio | number: '1.0-0'}}
+                  </p>
+                                    
+                  <button style="height: 30px; display: block; margin:auto;" ion-button color="primary" (click)="agregar_borrar(producto)">
+                      agregar/borrar
+                  </button>
+                </ion-card-content>
+              </ion-card>                              
+              
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-infinite-scroll threshold="200px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Cargando...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+</ion-content>

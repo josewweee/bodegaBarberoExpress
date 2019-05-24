@@ -1,0 +1,74 @@
+<!--
+  Generated template for the ListaProductosPedidoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>listaProductosPedido</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+    <ion-list>
+        <ion-item-sliding *ngFor="let producto of lista">
+          <ion-item >          
+            <ion-avatar item-start>
+              <img style="width: 100px; height: 100px;" src="{{producto.foto}}"/>              
+            </ion-avatar> 
+            <h1 style="text-transform: capitalize;">{{producto.nombre}}</h1>      
+            <h3>Marca: {{producto.marca}}</h3>      
+            <h3>Tipo: {{producto.tipo}}</h3>  
+            <h1>Precio: ${{producto.precio}}</h1>               
+            <h1>Cantidad: {{producto.cantidad}}</h1>
+
+            <button ion-button color="ok" (click)="sumarUno(producto)">
+              <ion-icon name="add"></ion-icon>&nbsp;
+            </button>
+            <button ion-button color="ok" (click)="restarUno(producto)">
+              <ion-icon name="remove"></ion-icon>&nbsp;
+            </button>
+            <button ion-button color="ok" (click)="borrarProducto(producto)">
+              <ion-icon ios="ios-trash" md="md-trash"></ion-icon>
+              </button>
+          </ion-item>                 
+        </ion-item-sliding>
+      </ion-list>
+      <button ion-button color="ok" (click)="agregarProductos()">
+          <ion-icon name="add-circle"></ion-icon>&nbsp;
+          agregar productos
+        </button>
+    </ion-col>
+    <ion-col>
+        <img style="width: 100%; height: 90px;" src="../assets/imgs/barra_abajo.png"/>
+        <ion-item>      
+            <hr>
+            NOMBRE: {{pedido.usuario.nombre}}
+            <hr>
+            TELEFONO: {{pedido.usuario.telefono}}
+            <hr>
+            Departamento: {{pedido.departamento}}
+            <hr>      
+            MUNICIPIO: {{pedido.municipio}}
+            <hr>
+            Barrio: {{pedido.barrio}}
+            <hr>
+            DIRECCION: {{pedido.direccion}}
+            <hr>
+            Observaciones: {{pedido.observaciones}}
+            <hr>
+            TOTAL: {{pedido.total}}
+            <hr>     
+          </ion-item>
+          <img style="width: 100%; height: 90px;" src="../assets/imgs/barra_abajo.png"/>  
+    </ion-col>
+    </ion-row>
+    </ion-grid>
+</ion-content>
