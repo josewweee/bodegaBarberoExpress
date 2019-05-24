@@ -368,6 +368,7 @@ export class PedidosPage {
       }
       i++;
     }
+    console.log("Proceso terminado");
     this.guardar_ganancias_base_de_datos();
   }
 
@@ -377,37 +378,47 @@ export class PedidosPage {
     var pago_domicilio_cliente = Number(4500);
     var posicionProducto = 0;
     var total_ganancia_pedido = 0;
-    for(var i = 0; i < pedido.productos.length; i++){
-      var idProd = pedido.productos[i].id;
-      for(var j = 0; j < this.productos.length; j++){
-        var idBodega = this.productos[j].id;
-        if(idProd == idBodega){
-          posicionProducto = j;
+
+    try {
+      for(var i = 0; i < pedido.productos.length; i++){
+        var idProd = pedido.productos[i].id;
+        for(var j = 0; j < this.productos.length; j++){
+          var idBodega = this.productos[j].id;
+          if(idProd == idBodega){
+            posicionProducto = j;
+          }
         }
+        ganancias_producto = Number(this.productos[posicionProducto].ganancia);
+        total_ganancia_pedido += ganancias_producto;
       }
-      ganancias_producto = Number(this.productos[posicionProducto].ganancia);
-      total_ganancia_pedido += ganancias_producto;
+      return(total_ganancia_pedido - (costo_domicilio -pago_domicilio_cliente));
+    } catch (error) {
+      return 0;
     }
-    return(total_ganancia_pedido - (costo_domicilio -pago_domicilio_cliente));
-    
   }
 
   dinero_mercancia(pedido){
     var costo_mercancia_producto = 0;
     var total_mercancia = 0;
     var posicionProducto = 0;
-    for(var i = 0; i < pedido.productos.length; i++){
-      var idProd = pedido.productos[i].id;
-      for(var j = 0; j < this.productos.length; j++){
-        var idBodega = this.productos[j].id;
-        if(idProd == idBodega){
-          posicionProducto = j;
+
+    try {
+      for(var i = 0; i < pedido.productos.length; i++){
+        var idProd = pedido.productos[i].id;
+        for(var j = 0; j < this.productos.length; j++){
+          var idBodega = this.productos[j].id;
+          if(idProd == idBodega){
+            posicionProducto = j;
+          }
         }
+        costo_mercancia_producto = Number(this.productos[posicionProducto].costo) * Number(pedido.productos[i].cantidad);
+        total_mercancia += costo_mercancia_producto;
       }
-      costo_mercancia_producto = Number(this.productos[posicionProducto].costo) * Number(pedido.productos.productos[i].cantidad);
-      total_mercancia += costo_mercancia_producto;
+      return total_mercancia;
+    } catch (error) {
+      return 0;
     }
-    return total_mercancia;
+    
   }
 
   guardar_ganancias_base_de_datos(){
