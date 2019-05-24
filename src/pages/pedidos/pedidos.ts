@@ -368,7 +368,6 @@ export class PedidosPage {
       }
       i++;
     }
-    console.log("Proceso terminado");
     this.guardar_ganancias_base_de_datos();
   }
 
