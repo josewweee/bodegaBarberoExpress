@@ -558,7 +558,6 @@ export class PedidosPage {
             this.crud.create(pathCrear, pedido);
             this.crud.delete(pathBorrar);
             this.crud.create(pathTotalRecib, this.totalRecibos);
-            console.log('entregado');
           }
         }
       ]
