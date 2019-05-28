@@ -22,6 +22,10 @@ export class ContabilidadPage {
   ganancia_neta:number;
   dinero_bodega:number;
   mercancia:number
+  efectivo:boolean;
+  cuenta:boolean;
+  efectivo_e:boolean;
+  cuenta_e:boolean;
 
   //VARIABLES GLOBALES
   pedidos: any = [];
@@ -33,13 +37,17 @@ export class ContabilidadPage {
   costo_domicilio: number;
   fecha: any;
   deuda_total: number;
+  deudor0: number; //deudas hermano ramon
   deudor1: number; //deudas cristian
-  deudor2: number; //deudas hermano ramon
-  deudor3: number; //ramon
-  deudor4: number; //deudas jose
+  deudor2: number; //ramon
+  deudor3: number; //deudas jose
   ingresos_netos:number;
   egresos:number;
   utilidades: number;
+  balance: number;
+  activos: number;
+  dineroEfectivo:number;
+  dineroCuenta:number;
 
   cantidadEnviosMensajeros:number;
   ganancia: number;
@@ -85,7 +93,7 @@ export class ContabilidadPage {
     this.valor_deuda = 0;
     this.fecha = new Date().toDateString().replace(/\s/g,'_');
 
-    //DATOS DE LAS DEUDAS DE LA DB
+    //DATOS DE LAS DEUDAS Y CONTABILIDAD DE LA DB
     this.crud.get("/TOTAL_DIA/" + this.fecha + "/ganancias").valueChanges()
           .subscribe((data) => {
             this.ganancia = Number(data);
@@ -93,6 +101,15 @@ export class ContabilidadPage {
     this.crud.get("/TOTAL_DIA/" + this.fecha + "/mercancia").valueChanges()
           .subscribe((data) => {
             this.mercancia = Number(data);
+    });
+
+    this.crud.get("/TOTAL_DIA/CONTABILIDAD/efectivo").valueChanges()
+    .subscribe((data) => {
+      this.dineroEfectivo = Number(data);
+    });
+    this.crud.get("/TOTAL_DIA/CONTABILIDAD/cuenta_ahorros").valueChanges()
+    .subscribe((data) => {
+      this.dineroCuenta = Number(data);
     });
 
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/ingresos_netos").valueChanges()
@@ -113,20 +130,20 @@ export class ContabilidadPage {
     });
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_0").valueChanges()
     .subscribe((data) => {
-      this.deudor1 = Number(data);
-      console.log(this.deudor1);
+      this.deudor0 = Number(data);
+      console.log(this.deudor0);
     });
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_1").valueChanges()
     .subscribe((data) => {
-      this.deudor2 = Number(data);
+      this.deudor1 = Number(data);
     });
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_2").valueChanges()
     .subscribe((data) => {
-      this.deudor3 = Number(data);
+      this.deudor2 = Number(data);
     });
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_3").valueChanges()
     .subscribe((data) => {
-      this.deudor4 = Number(data);
+      this.deudor3 = Number(data);
     });
     
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/ganancia_esperada").valueChanges()
@@ -216,11 +233,11 @@ export class ContabilidadPage {
             var i = 0;
             this.ganancia = 0;
             this.ganancia_esperada = 0;
-            var contador_pedidos = 0;
+            /* var contador_pedidos = 0; */
             while(i < this.pedidos.length){
               if(this.pedidos[i].estado.slice(0,3) == "G -"){
                 try {
-                  contador_pedidos++;
+                /*   contador_pedidos++; */
                  /*  this.ganancia += Number(this.gananciaPedido(this.pedidos[i]));
                   this.mercancia += Number(this.dinero_mercancia(this.pedidos[i])); */
                  /*  console.log("GANANCIAS ACOMULADAS " + " = " + this.ganancia + " # " + contador_pedidos);
@@ -314,69 +331,146 @@ export class ContabilidadPage {
     return total_mercancia;
   }
 
-  agregar_deudas(valor_deuda0, prestamista){
+  modEgresos(valorIngresado0, tipoEgreso){
+    var valorIngresado = Number(valorIngresado0);
     var path;
-    var pagando_deuda = false;
-    var nuevo_valor = 0;
-    var valor_deuda = Number(valor_deuda0);
-    if(valor_deuda < 0){
-      pagando_deuda = true;
+    var pathTipoCuenta;
+
+    if(this.efectivo_e && !this.cuenta_e){
+      pathTipoCuenta = "/TOTAL_DIA/CONTABILIDAD/efectivo";
+      this.dineroEfectivo -= valorIngresado;
+      this.crud.edit(pathTipoCuenta, this.dineroEfectivo);
+    }else if(this.cuenta_e && !this.efectivo_e){
+      pathTipoCuenta = "/TOTAL_DIA/CONTABILIDAD/cuenta_ahorros";
+      this.dineroCuenta -= valorIngresado;
+      this.crud.edit(pathTipoCuenta, this.dineroCuenta);
+    }else{
+      alert("Seleccion si es efectivo o cuenta de ahorros");
+      return;
     }
-    var abono_deuda = true;
-    var movimiento_deudas = false;
-    switch (prestamista) {
-      case 0:
-        path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_0"
-        nuevo_valor = this.deudor1 + valor_deuda;
-        this.deudor1 += nuevo_valor;
-        movimiento_deudas = true;
+
+    switch (tipoEgreso) {
+      case "deudasHermanoRamon":
+        path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_0";
+        this.deudor0 = this.deudor0 - valorIngresado;
+        this.crud.edit(path,this.deudor0);
         break;
-      case 1:
-        path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_1"
-        nuevo_valor = this.deudor2 + valor_deuda;
-        this.deudor2 += nuevo_valor;
-        movimiento_deudas = true;
+      case "deudasCristian":
+        path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_1";
+        this.deudor1 = this.deudor1 - valorIngresado;
+        this.crud.edit(path,this.deudor1);
         break;
-      case 2:
-        path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_2"
-        nuevo_valor = this.deudor3 + valor_deuda;
-        this.deudor3 += nuevo_valor;
-        movimiento_deudas = true;
+      case "deudasRamon":
+        path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_2";
+        this.deudor2 = this.deudor2 - valorIngresado;
+        console.log(this.deudor2);
+        this.crud.edit(path,this.deudor2);
         break;
-      case 3:
-        path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_3"
-        nuevo_valor = this.deudor4 + valor_deuda;
-        this.deudor4 += nuevo_valor;
-        movimiento_deudas = true;
+      case "deudasJose":
+        path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_3";
+        this.deudor3 = this.deudor3 - valorIngresado;
+        this.crud.edit(path,this.deudor3);
         break;
-      case 4:
-       abono_deuda = false;
-       movimiento_deudas = false;
+      case "otros":
+        path = "/TOTAL_DIA/CONTABILIDAD/egresos"
+        this.egresos += (Number(valorIngresado));
+        this.crud.edit(path, this.egresos);
         break;
-      case 5:
-       abono_deuda = true;
-       movimiento_deudas = false;
+      case "publicidad":
+        path = "/TOTAL_DIA/CONTABILIDAD/egresos"
+        this.egresos += (Number(valorIngresado));
+        this.crud.edit(path, this.egresos);
         break;
-      default:
+      case "manoObra":
+        path = "/TOTAL_DIA/CONTABILIDAD/egresos"
+        this.egresos += (Number(valorIngresado));
+        this.crud.edit(path, this.egresos);
+        break;
+      default: //GASTOS EN (OTROS, PUBLICIDAD O MANO DE OBRA)
+        alert("Seleccion una categoria para el egreso");
         break;
     }
-    if(abono_deuda && !movimiento_deudas){
-      this.egresos += Math.abs(Number(valor_deuda));
-      this.crud.edit("/TOTAL_DIA/CONTABILIDAD/egresos", this.egresos);
-    }else if (!abono_deuda && !movimiento_deudas){
-      this.ingresos_netos += Math.abs(Number(valor_deuda));
-      this.crud.edit("/TOTAL_DIA/CONTABILIDAD/ingresos_netos", this.ingresos_netos);
-    }
-    if(movimiento_deudas){
-      this.crud.edit(path, nuevo_valor);
-      this.deuda_total = Number(this.deudor1 + this.deudor2 + this.deudor3 + this.deudor4);
-      this.crud.edit(this.pathDeudas, this.deuda_total);
-      if(pagando_deuda){
-        this.egresos += Math.abs(Number(valor_deuda));
-        this.crud.edit("/TOTAL_DIA/CONTABILIDAD/egresos", this.egresos);
-      }
-    }
-    this.utilidades = this.ingresos_netos - this.egresos;
+    this.utilidades -= valorIngresado;
     this.crud.edit("/TOTAL_DIA/CONTABILIDAD/utilidades", this.utilidades);
+  }
+
+  agregarDeudas(valorIngresado0,valorIngresado1,valorIngresado2,valorIngresado3){
+    var path;
+    
+    //HERMANO RAMON
+    if(valorIngresado0 != undefined && valorIngresado0.length > 2){
+      path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_0"
+      this.deudor0 += Number(valorIngresado0);
+      this.crud.edit(path, this.deudor0);
+    }else{
+      
+    }
+
+    //CRISTIAN
+    if(valorIngresado1 != undefined && valorIngresado1.length > 2){
+      path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_1"
+      this.deudor1 += Number(valorIngresado1);
+      this.crud.edit(path, this.deudor1);
+    }else{
+      
+    }
+
+    //RAMON
+    if(valorIngresado2 != undefined && valorIngresado2.length > 2){
+      path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_2"
+      this.deudor2 += Number(valorIngresado2);
+      this.crud.edit(path, this.deudor2);
+    }else{
+      
+    }
+
+    //JOSE
+    if(valorIngresado3 != undefined && valorIngresado3.length > 2){
+      path = "/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_3"
+      this.deudor3 += Number(valorIngresado3);
+      this.crud.edit(path, this.deudor3);
+    }else{
+      
+    }
+  }
+
+  agregarIngreso(valorIngresado0){
+    var valorIngresado = Number(valorIngresado0);
+    var path = "/TOTAL_DIA/CONTABILIDAD/ingresos_netos";
+    var pathTipoCuenta;
+
+    if(this.efectivo && !this.cuenta){
+      pathTipoCuenta = "/TOTAL_DIA/CONTABILIDAD/efectivo";
+      this.dineroEfectivo += valorIngresado;
+      this.crud.edit(pathTipoCuenta, this.dineroEfectivo);
+    }else if(this.cuenta && !this.efectivo){
+      pathTipoCuenta = "/TOTAL_DIA/CONTABILIDAD/cuenta_ahorros";
+      this.dineroCuenta += valorIngresado;
+      this.crud.edit(pathTipoCuenta, this.dineroCuenta);
+    }else{
+      alert("Seleccion si es efectivo o cuenta de ahorros");
+      return;
+    }
+    this.ingresos_netos += valorIngresado;
+    this.crud.edit(path, this.ingresos_netos);
+
+    this.utilidades += valorIngresado;
+    this.crud.edit("/TOTAL_DIA/CONTABILIDAD/utilidades", this.utilidades);
+  }
+
+  updateEfectivo(){
+    this.cuenta = false;
+  }
+
+  updateCuenta(){
+    this.efectivo = false;
+  }
+
+  updateEfectivo_egresos(){
+    this.cuenta_e = false;
+  }
+
+  updateCuenta_egresos(){
+    this.efectivo_e = false; 
   }
 }

@@ -25,6 +25,8 @@ export class DetallePedidoPage {
   total: number;
   departamento: string;
   observaciones: string;
+  barrio: string;
+  nombre: string;
   //datos locales
   estadoActual_local: string;
   direccion_local: string;
@@ -44,6 +46,8 @@ export class DetallePedidoPage {
     this.departamento = this.pedido.departamento;
     this.telefono = this.pedido.usuario.telefono;
     this.observaciones = this.pedido.observaciones;
+    this.barrio = this.pedido.barrio;
+    this.nombre = this.pedido.usuario.nombre;
     console.log("total = " +  this.total);
 
     var path_pedido = "/PEDIDOS_NACIONALES/" + this.pedido_id;
@@ -96,13 +100,19 @@ export class DetallePedidoPage {
       //editar total
       let pathTotal = "/PEDIDOS/" + this.pedido.id + "/total";
       this.crud.edit(pathTotal, this.total);
+      //editar barrio
+      let pathBarrio = "/PEDIDOS/" + this.pedido.id + "/barrio";
+      this.crud.edit(pathBarrio, this.barrio);
       //editar direccion
       let pathDireccion = "/PEDIDOS/" + this.pedido.id + "/direccion";
       this.crud.edit(pathDireccion, this.direccion);
-        //editar telefono
+      //editar telefono
       let pathTelefono = "/PEDIDOS/" + this.pedido.id + "/usuario/telefono";
       this.crud.edit(pathTelefono, this.telefono);
-      //editar total
+      //editar nombre
+      let pathNombre = "/PEDIDOS/" + this.pedido.id + "/usuario/nombre";
+      this.crud.edit(pathNombre, this.nombre);
+      //editar municipio
       let pathMunicipio = "/PEDIDOS/" + this.pedido.id + "/municipio";
       this.crud.edit(pathMunicipio, this.municipio);
       //editar estado

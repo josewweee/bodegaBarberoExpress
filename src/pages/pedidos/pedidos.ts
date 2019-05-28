@@ -551,12 +551,12 @@ export class PedidosPage {
         {
           text: 'Aceptar',
           handler: () => {
-            let pathCrear = "/RECIBOS/" + pedido.id;
-            let pathBorrar = "/PEDIDOS/" + pedido.id;
+            let pathRecibos = "/RECIBOS/" + pedido.id;
+            let pathPedidos = "/PEDIDOS/" + pedido.id;
             let pathTotalRecib = "/TOTAL_RECIBOS/";
             pedido.estado = pedido.estado + "*>";
-            this.crud.create(pathCrear, pedido);
-            this.crud.delete(pathBorrar);
+            this.crud.create(pathRecibos, pedido);
+            this.crud.delete(pathPedidos);
             this.crud.create(pathTotalRecib, this.totalRecibos);
           }
         }

@@ -46,9 +46,9 @@
 
   <ion-row>
     <ion-item>
-      <h1 style="text-align: center">Ganancia / Ganancia esperada</h1>
+      <h1 style="text-align: center">Ganancia / G.esperada</h1>
       <h1 style="text-align: center">{{ganancia}} / {{ganancia_esperada}}</h1>
-      <h1 style="text-align: center">Merca / Merca esperada</h1>
+      <h1 style="text-align: center">Merca / M.esperada</h1>
       <h1 style="text-align: center">{{mercancia}} / {{mercancia_esperada}}</h1>
     </ion-item>
   </ion-row>
@@ -60,101 +60,127 @@
   </ion-row>
   
   <ion-row>
-    <ion-item>
-      <h1 style="text-align: center">Dinero en bodega: {{dinero_bodega}}</h1>
-    </ion-item>
+      <ion-col>
+          <h1 style="text-align: center">Dinero en bodega: {{dinero_bodega}}</h1>
+      </ion-col>
+      <ion-col>
+          <h1 style="text-align: center">Capital neto: {{utilidades}}</h1>
+      </ion-col>
+      <ion-col>
+          <h1 style="text-align: center">Balance: {{balance}}</h1>
+      </ion-col>
+     
   </ion-row>
 
   <ion-row>
     <ion-col>
       <ion-list inset>
         <!-- LISTA DE CONTABILIDAD -->
+      
+        <ion-row>
+          <ion-col>
+              <h3> ingresos: {{ingresos_netos}}</h3>
+              <ion-item>
+                  <ion-label floating >Valor,(sin comas o puntos)</ion-label>
+                <ion-input type="text" [(ngModel)]="str_ingresos" style="text-align: center;" required></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Efectivo</ion-label>
+                <ion-checkbox [(ngModel)]="efectivo" (ionChange)="updateEfectivo()"></ion-checkbox>
+              </ion-item>
+              <ion-item>
+                <ion-label>Cuenta</ion-label>
+                <ion-checkbox [(ngModel)]="cuenta" (ionChange)="updateCuenta()"></ion-checkbox>
+              </ion-item>
+          </ion-col>     
+          <ion-col class="signup-col">
+            <button ion-button class="submit-btn" (click)="agregarIngreso(str_ingresos)" style="display:block; margin:auto;">Sumar ingresos</button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <h3> Egresos: {{egresos}}</h3>
+                
+                <ion-item>
+                    <ion-label floating >Valor,(sin comas o puntos)</ion-label>
+                  <ion-input type="text" [(ngModel)]="str_egresos" style="text-align: center;" required></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Efectivo</ion-label>
+                  <ion-checkbox [(ngModel)]="efectivo_e" (ionChange)="updateEfectivo_egresos()"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Cuenta</ion-label>
+                  <ion-checkbox [(ngModel)]="cuenta_e" (ionChange)="updateCuenta_egresos()"></ion-checkbox>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label>Tipo egreso</ion-label>
+                    <ion-select [(ngModel)]="tipoEgreso" okText="Listo" cancelText="Cancelar">
+                      <ion-option value="publicidad">publicidad</ion-option>
+                      <ion-option value="otros">otros</ion-option>
+                      <ion-option value="deudasHermanoRamon">pago hermano ramon</ion-option>
+                      <ion-option value="deudasCristian">pago cristian</ion-option>
+                      <ion-option value="deudasRamon">pago ramon</ion-option>
+                      <ion-option value="deudasJose">pago jose</ion-option>
+                      <ion-option value="manoObra">mano de obra</ion-option>
+                    </ion-select>
+                </ion-item>
+                
+               
+            </ion-col>     
+            <ion-col class="signup-col">
+              <button ion-button class="submit-btn" (click)="modEgresos(str_egresos,tipoEgreso)" style="display:block; margin:auto;">Sumar egreso</button>
+            </ion-col>
+          </ion-row>
+          
       <ion-row>
         <ion-col>
-          <h3> Deuda total: {{deuda_total}}</h3>
-            <ion-item>
-                <ion-label floating >Valor,(sin comas o puntos)</ion-label>
-              <ion-input type="text" [(ngModel)]="str_valor_deuda" style="text-align: center;" required></ion-input>
-            </ion-item>
+          <h1 style="text-align: center;"> Deuda total: {{deuda_total}}</h1>
         </ion-col>     
       </ion-row>
        
       <ion-row>
           <ion-col>
-              <h3> Deuda hermano ramon: {{deudor1}}</h3>
+              <h3> Deuda hermano ramon: {{deudor0}}</h3>
               <ion-item>
                   <ion-label floating >Valor,(sin comas o puntos)</ion-label>
                 <ion-input type="text" [(ngModel)]="str_provedor1" style="text-align: center;" required></ion-input>
               </ion-item>
           </ion-col>     
-          <ion-col class="signup-col">
-            <button ion-button class="submit-btn" (click)="agregar_deudas(str_provedor1,0)" style="display:block; margin:auto;">Agregar deuda</button>
-          </ion-col>
         </ion-row>
         <ion-row>
             <ion-col>
-                <h3> Deuda cristian: {{deudor2}}</h3>
+                <h3> Deuda cristian: {{deudor1}}</h3>
                 <ion-item>
                     <ion-label floating >Valor,(sin comas o puntos)</ion-label>
                   <ion-input type="text" [(ngModel)]="str_provedor2" style="text-align: center;" required></ion-input>
                 </ion-item>
             </ion-col>     
-            <ion-col class="signup-col">
-              <button ion-button class="submit-btn" (click)="agregar_deudas(str_provedor2,1)" style="display:block; margin:auto;">Agregar deuda</button>
-            </ion-col>
           </ion-row>
           <ion-row>
               <ion-col>
-                  <h3> Deuda ramon: {{deudor3}}</h3>
+                  <h3> Deuda ramon: {{deudor2}}</h3>
                   <ion-item>
                       <ion-label floating >Valor,(sin comas o puntos)</ion-label>
                     <ion-input type="text" [(ngModel)]="str_provedor3" style="text-align: center;" required></ion-input>
                   </ion-item>
               </ion-col>     
-              <ion-col class="signup-col">
-                <button ion-button class="submit-btn" (click)="agregar_deudas(str_provedor3,2)" style="display:block; margin:auto;">Agregar deuda</button>
-              </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <h3> Deuda jose: {{deudor4}}</h3>
+                    <h3> Deuda jose: {{deudor3}}</h3>
                     <ion-item>
                         <ion-label floating >Valor,(sin comas o puntos)</ion-label>
                       <ion-input type="text" [(ngModel)]="str_provedor4" style="text-align: center;" required></ion-input>
                     </ion-item>
                 </ion-col>     
-                <ion-col class="signup-col">
-                  <button ion-button class="submit-btn" (click)="agregar_deudas(str_provedor4,3)" style="display:block; margin:auto;">Agregar deuda</button>
-                </ion-col>
               </ion-row>
-
-              <ion-row>
-                  <ion-col>
-                      <h3> ingresos netos: {{ingresos_netos}}</h3>
-                      <ion-item>
-                          <ion-label floating >Valor,(sin comas o puntos)</ion-label>
-                        <ion-input type="text" [(ngModel)]="str_ingresos" style="text-align: center;" required></ion-input>
-                      </ion-item>
-                  </ion-col>     
-                  <ion-col class="signup-col">
-                    <button ion-button class="submit-btn" (click)="agregar_deudas(str_ingresos,4)" style="display:block; margin:auto;">Sumar ingresos</button>
-                  </ion-col>
-                </ion-row>
-
-                <ion-row>
-                    <ion-col>
-                        <h3> Egresos: {{egresos}}</h3>
-                        <ion-item>
-                            <ion-label floating >Valor,(sin comas o puntos)</ion-label>
-                          <ion-input type="text" [(ngModel)]="str_egresos" style="text-align: center;" required></ion-input>
-                        </ion-item>
-                    </ion-col>     
-                    <ion-col class="signup-col">
-                      <button ion-button class="submit-btn" (click)="agregar_deudas(str_egresos,5)" style="display:block; margin:auto;">Sumar egreso</button>
-                    </ion-col>
-                  </ion-row>
-
-                  <ion-row>
+              <button ion-button class="submit-btn" (click)="agregarDeudas(str_provedor1,str_provedor2,str_provedor3,str_provedor4)" style="display:block; margin:auto;">Agregar deuda</button>
+                 <!--  <ion-row>
                       <ion-col>
                           <h3> utilidades: {{utilidades}}</h3>
                           <ion-item>
@@ -162,11 +188,21 @@
                             <ion-input type="text" [(ngModel)]="str_utilidades" style="text-align: center;" required></ion-input>
                           </ion-item>
                       </ion-col>     
-                    </ion-row>
+                    </ion-row> -->
+
+      
 
       </ion-list>
     </ion-col>
   </ion-row>
 
-
+  <ion-row>
+    <ion-col>
+        <h1 style="text-align: center">Efectivo: {{dineroEfectivo}}</h1>
+    </ion-col>
+    <ion-col>
+        <h1 style="text-align: center">Cuenta: {{dineroCuenta}}</h1>
+    </ion-col>
+   
+</ion-row>
 </ion-content>

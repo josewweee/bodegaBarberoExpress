@@ -23,22 +23,26 @@
     <ion-item>      
       ID: {{pedido.id}}
       <hr>
-      NOMBRE: {{pedido.usuario.nombre}}
-      <hr>
       EMAIL: {{pedido.usuario.email}}
       <hr>
       USER_ID: {{pedido.usuario.uid}}
       <hr>      
       Departamento: {{pedido.departamento}}
       <hr>
-      Observaciones: {{pedido.observaciones}}
-      <hr>
-      Barrio: {{pedido.barrio}}
-      <hr>     
     </ion-item>
     
 
     <!-- EDITABLES -->
+    <ion-item>
+        <ion-label>Nombre</ion-label> 
+        <ion-input type="text" [(ngModel)]="nombre"></ion-input>          
+    </ion-item>
+
+    <ion-item>
+        <ion-label>Barrio</ion-label> 
+        <ion-input type="text" [(ngModel)]="barrio"></ion-input>          
+    </ion-item>
+
     <ion-item>
         <ion-label>Telefono</ion-label> 
         <ion-input type="text" [(ngModel)]="telefono"></ion-input>          
