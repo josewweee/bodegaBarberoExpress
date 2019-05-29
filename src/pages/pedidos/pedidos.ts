@@ -64,12 +64,16 @@ export class PedidosPage {
   cantidadEnviosMensajero1:number;
   cantidadEnviosMensajero0:number;
   ganancia: number;
+  mercancia: number;
   costo_domicilio:number;
   mercancia_esperada:number;
   ganancia_esperada:number;
+  fecha: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public crud: crudDB, public alertCtrl: AlertController, private callNumber: CallNumber) {
     //PEDIDOS, RECIBOS Y PRODUCTOS
     this.ganancia = 0;
+    this.mercancia = 0;
+    this.fecha = new Date().toDateString().replace(/\s/g,'_');
     this.crud.getList(this.path).valueChanges()
           .subscribe((pedidosDB) => {
             this.pedidos = pedidosDB;
@@ -434,6 +438,13 @@ export class PedidosPage {
     this.crud.create(pathMercancia, this.mercancia_esperada);
   }
 
+  guardar_ganancias_recolectadas_base_de_datos(){
+    var pathGanancias = "/TOTAL_DIA/"+ this.fecha + "/ganancias";
+    var pathMercancia = "/TOTAL_DIA/"+ this.fecha + "/mercancia";
+    this.crud.create(pathGanancias, this.ganancia);
+    this.crud.create(pathMercancia, this.mercancia);
+  }
+
   entregadosGeneral(){
 
     let alert = this.alertCtrl.create({
@@ -565,6 +576,11 @@ export class PedidosPage {
             this.crud.create(pathRecibos, pedido);
             this.crud.delete(pathPedidos);
             this.crud.create(pathTotalRecib, this.totalRecibos);
+
+            this.restar_productos_bodega(pedido);
+            this.ganancia += Number(this.gananciaPedido(pedido));
+            this.mercancia += Number(this.dinero_mercancia(pedido));
+            this.guardar_ganancias_recolectadas_base_de_datos();
           }
         }
       ]
@@ -1055,6 +1071,98 @@ export class PedidosPage {
       throw new Error(error);
     }    
   }
+
+  restar_productos_bodega(pedido){
+    try {
+      //FUNCION PARA RESTAR PRODUCTOS EN VERDE, CON LOS DE LA BASE DE DATOS
+      for(var k = 0; k < pedido.productos.length; k++){
+        var idProd = pedido.productos[k].id;
+        var posicionProducto;
+        //BUSCAMOS EL PRODUCTO DEL PEDIDO EN LA BASE DE DATOS
+        for(var g = 0; g < this.productos.length; g++){
+          if(this.productos[g].id == idProd){
+            posicionProducto = g;
+          }
+        }
+        //MIRAMOS SI TENEMOS UN PRODUCTO QUE SEA UNA PROMO
+        if(this.productos[posicionProducto].detallesPromo){
+          console.log("promo");
+          var posPromo = posicionProducto;
+          //RESTAMOS LA CANTIDAD DEL PRODUCTO EN LA PROMO
+          var idProductoARestar = this.productos[posicionProducto].detallesPromo.id;
+          for(g = 0; g < this.productos.length; g++){
+            if(this.productos[g].id == idProductoARestar){
+              posicionProducto = g;
+            }
+          }
+          var nuevo_valor_producto = Number(this.productos[posicionProducto].disponibles) - Number(this.productos[posPromo].detallesPromo.cantidad) * Number(pedido.productos[k].cantidad);
+          var path_a_restar = "/PRODUCTOS/" + idProductoARestar + "/disponibles";
+          console.log("path --> " + path_a_restar);
+          console.log("viejo valor de " + this.productos[posicionProducto].nombre + " = " + this.productos[posicionProducto].disponibles);
+          this.productos[posicionProducto].disponibles = nuevo_valor_producto;
+          console.log("nuevo valor de " + this.productos[posicionProducto].nombre + " = " + this.productos[posicionProducto].disponibles);
+          console.log("__________________________________________________");
+          this.crud.edit(path_a_restar, nuevo_valor_producto);
+         //MIRAMOS SI TENEMOS UN PRODUCTO QUE SEA UN COMBO
+        }else if(this.productos[posicionProducto].combo){
+          console.log("combo");
+          //HALLAMOS EL ID DE TODOS LOS PRODUCTOS EN EL COMBO
+          var arreglo_id_productos_combo = [];
+          var j = 0;
+          var idCombo = pedido.productos[k].id;
+          for(var g = 0; g < this.productos.length; g++){
+            if(this.productos[g].id == idCombo){
+              posicionProducto = g;
+            }
+          }
+          for(var p = 0; p < this.productos[posicionProducto].combo.idProductos.length; p++){
+            if(this.productos[posicionProducto].combo.idProductos[p] != ','){
+              if(arreglo_id_productos_combo[j] && arreglo_id_productos_combo[j].length > 0){
+                arreglo_id_productos_combo[j] += this.productos[posicionProducto].combo.idProductos[p];
+              }else{
+                arreglo_id_productos_combo[j] = this.productos[posicionProducto].combo.idProductos[p];
+              }
+            }else{
+              j++;
+            }
+          }
+          //RESTAMOS TODOS LOS PRODUCTOS DEL COMBO
+          for(var w = 0; w < arreglo_id_productos_combo.length; w++){
+            var idProductoARestar = arreglo_id_productos_combo[w];
+            for(var g = 0; g < this.productos.length; g++){
+              if(this.productos[g].id == idProductoARestar){
+                posicionProducto = g;
+              }
+            }
+            var nuevo_valor_producto = Number(this.productos[posicionProducto].disponibles) - (1 * Number(pedido.productos[k].cantidad));
+            var path_a_restar = "/PRODUCTOS/" + idProductoARestar + "/disponibles";
+            console.log("path --> " + path_a_restar);
+            console.log("viejo valor de " + this.productos[posicionProducto].nombre + " = " + this.productos[posicionProducto].disponibles);
+            this.productos[posicionProducto].disponibles = nuevo_valor_producto;
+            console.log("nuevo valor de " + this.productos[posicionProducto].nombre + " = " + this.productos[posicionProducto].disponibles);
+            console.log("__________________________________________________");
+            this.crud.edit(path_a_restar, nuevo_valor_producto);
+          }
+        //MIRAMOS SI TENEMOS UN PRODUCTO NORMAL
+        }else{
+          console.log("normal");
+          //RESTAMOS EL PRODUCTO COMPRADO
+          var idProductoARestar = pedido.productos[k].id
+          var nuevo_valor_producto = Number(this.productos[posicionProducto].disponibles) - Number(pedido.productos[k].cantidad);
+          var path_a_restar = "/PRODUCTOS/" + idProductoARestar + "/disponibles";
+          console.log("path --> " + path_a_restar);
+          console.log("viejo valor de " + this.productos[posicionProducto].nombre + " = " + this.productos[posicionProducto].disponibles);
+          this.productos[posicionProducto].disponibles = nuevo_valor_producto;
+          console.log("nuevo valor de " + this.productos[posicionProducto].nombre + " = " + this.productos[posicionProducto].disponibles);
+          console.log("__________________________________________________");
+          this.crud.edit(path_a_restar, nuevo_valor_producto);
+        }
+      }
+     
+    } catch (error) {
+      console.log(error);
+    }
+}
 
 }
 
