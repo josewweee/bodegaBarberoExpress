@@ -36,7 +36,7 @@ export class ContabilidadPage {
   valor_deuda: number;
   costo_domicilio: number;
   fecha: any;
-  deuda_total: number;
+  deuda_total: number = 0;
   deudor0: number; //deudas hermano ramon
   deudor1: number; //deudas cristian
   deudor2: number; //ramon
@@ -44,7 +44,7 @@ export class ContabilidadPage {
   ingresos_netos:number;
   egresos:number;
   utilidades: number;
-  balance: number;
+  balance: number = 0;
   activos: number;
   dineroEfectivo:number;
   dineroCuenta:number;
@@ -123,27 +123,31 @@ export class ContabilidadPage {
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/utilidades").valueChanges()
           .subscribe((data) => {
             this.utilidades = Number(data);
-    });
-    this.crud.get("/TOTAL_DIA/CONTABILIDAD/total_deuda").valueChanges()
-          .subscribe((data) => {
-            this.deuda_total = Number(data);
+            this.balance += this.utilidades;
     });
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_0").valueChanges()
     .subscribe((data) => {
       this.deudor0 = Number(data);
-      console.log(this.deudor0);
+      this.deuda_total += this.deudor0;
+      this.balance -= this.deudor0;
     });
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_1").valueChanges()
     .subscribe((data) => {
       this.deudor1 = Number(data);
+      this.deuda_total += this.deudor1;
+      this.balance -= this.deudor1;
     });
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_2").valueChanges()
     .subscribe((data) => {
       this.deudor2 = Number(data);
+      this.deuda_total += this.deudor2;
+      this.balance -= this.deudor2;
     });
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/DEUDAS/provedor_3").valueChanges()
     .subscribe((data) => {
       this.deudor3 = Number(data);
+      this.deuda_total += this.deudor3;
+      this.balance -= this.deudor3;
     });
     
     this.crud.get("/TOTAL_DIA/CONTABILIDAD/ganancia_esperada").valueChanges()
@@ -302,6 +306,7 @@ export class ContabilidadPage {
       }
       /* console.log("dinero en " + producto.nombre + " de = " + (Number(producto.costo) * Number(producto.disponibles))); */
     }
+    this.balance += this.dinero_bodega;
     console.log("dinero en bodega" + this.dinero_bodega);
   }
 

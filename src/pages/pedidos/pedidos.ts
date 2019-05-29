@@ -178,16 +178,23 @@ export class PedidosPage {
   //FUNCION PARA GENERAR LISTA DE PEDIDOS EN COLOR VERDE
   GenerarLista(){
     var i = 0;
-    var texto = "Total pedidos: " +  this.ListosParaEnviar.length  +'\n' +'\n' + "Desde: " +'\n' + "Nombre: cristian franco, poblado, unidad torres de patio bonito" +'\n' + 
+    var pedidosLista: any = [];
+    for(var w=0; w < this.pedidos.length; w++){
+      if(this.pedidos[w].estado.slice(0,3) == 'W -'){
+        pedidosLista.push(this.pedidos[w]);
+        console.log(pedidosLista);
+      }
+    }
+    var texto = "Total pedidos: " +  pedidosLista.length  +'\n' +'\n' + "Desde: " +'\n' + "Nombre: cristian franco, poblado, edificio YAVISA" +'\n' + 
     "Teléfono: 305 766 8478" +'\n' + 
-    "Dirección: carrera 45#1-191, interior 1512" +'\n' +'\n';
-    while(i < this.ListosParaEnviar.length){
+    "Dirección: calle 9 #41-60, oficina 202" +'\n' +'\n';
+    while(i < pedidosLista.length){
         texto += (i+1) +")"+'\n';
-        texto += "nombre: "+ this.ListosParaEnviar[i].usuario.nombre+'\n';
-        texto += "telefono: "+ this.ListosParaEnviar[i].usuario.telefono+'\n';
-        texto += "direccion: "+ this.ListosParaEnviar[i].direccion+'\n';
-        texto += "observaciones: "+ this.ListosParaEnviar[i].observaciones+'\n'; 
-        texto += "cobrar: $ "+ this.ListosParaEnviar[i].total+'\n';
+        texto += "nombre: "+ pedidosLista[i].usuario.nombre+'\n';
+        texto += "telefono: "+ pedidosLista[i].usuario.telefono+'\n';
+        texto += "direccion: "+ pedidosLista[i].direccion+'\n';
+        texto += "observaciones: "+ pedidosLista[i].observaciones+'\n'; 
+        texto += "cobrar: $ "+ pedidosLista[i].total+'\n';
         texto += '\n';
         i++;
    }
