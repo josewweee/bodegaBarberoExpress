@@ -18,8 +18,8 @@ import { throwError } from 'rxjs';
   selector: 'page-pedidos',
   templateUrl: 'pedidos.html',
   styles: [`mycolor:{background-color : red}`],
-  
-  
+
+
 })
 export class PedidosPage {
 
@@ -81,7 +81,7 @@ export class PedidosPage {
     });
     this.crud.getList(this.pathNacionales).valueChanges()
           .subscribe((pedidosDB) => {
-            this.pedidosNacionales = pedidosDB;            
+            this.pedidosNacionales = pedidosDB;
     });
     this.crud.getList(this.pathProductos).valueChanges()
           .subscribe((productos) => {
@@ -189,15 +189,15 @@ export class PedidosPage {
         console.log(pedidosLista);
       }
     }
-    var texto = "Total pedidos: " +  pedidosLista.length  +'\n' +'\n' + "Desde: " +'\n' + "Nombre: cristian franco, poblado, edificio YAVISA" +'\n' + 
-    "Teléfono: 305 766 8478" +'\n' + 
-    "Dirección: calle 9 #41-60, oficina 202" +'\n' +'\n';
+    var texto = "Total pedidos: " +  pedidosLista.length  +'\n' +'\n';
     while(i < pedidosLista.length){
         texto += (i+1) +")"+'\n';
         texto += "nombre: "+ pedidosLista[i].usuario.nombre+'\n';
         texto += "telefono: "+ pedidosLista[i].usuario.telefono+'\n';
+        texto += "municipio: " + pedidosLista[i].municipio+'\n';
+        texto += "barrio: " + pedidosLista[i].barrio+'\n';
         texto += "direccion: "+ pedidosLista[i].direccion+'\n';
-        texto += "observaciones: "+ pedidosLista[i].observaciones+'\n'; 
+        texto += "observaciones: "+ pedidosLista[i].observaciones+'\n';
         texto += "cobrar: $ "+ pedidosLista[i].total+'\n';
         texto += '\n';
         i++;
@@ -207,7 +207,7 @@ export class PedidosPage {
    let alert = this.alertCtrl.create({
       title: "¡Pedidos para hoy!",
       message: texto_alerta,
-      buttons: [ 
+      buttons: [
         {
         text: "copiar",
         handler: () => {
@@ -257,7 +257,7 @@ export class PedidosPage {
     }else{
       this.crud.edit(path, 'W - ' + pedido.estado.slice(4));
     }
-    this.crud.create(pathPedido, pedido);  
+    this.crud.create(pathPedido, pedido);
   }
 
   enProceso(pedido){
@@ -273,7 +273,7 @@ export class PedidosPage {
               this.crud.delete(pathPedido);
             }catch (error) {
               throw new Error('No hay pedidos');
-            }    
+            }
             this.crud.edit(path, 'F - ' + pedido.estado.slice(4));
           }
         }else{
@@ -286,7 +286,7 @@ export class PedidosPage {
           this.crud.delete(pathPedido);
         }catch (error) {
           throw new Error(error);
-        }    
+        }
       }
     }else{
       this.crud.edit(path, 'F - ' + pedido.estado.slice(4));
@@ -317,7 +317,7 @@ export class PedidosPage {
       this.crud.delete(pathPedido);
     }catch (error) {
       throw new Error('No hay pedidos');
-    }    
+    }
   }
 
   despachado(pedido){
@@ -365,9 +365,9 @@ export class PedidosPage {
           this.crud.edit(path, this.ListosParaEnviar[i].estado);
           //agregamos la fecha de cuando fue despachado
           this.ListosParaEnviar[i].fecha =now.getTime();
-          var pathFecha = "/PEDIDOS/" +  this.ListosParaEnviar[i].id + "/fecha"; 
+          var pathFecha = "/PEDIDOS/" +  this.ListosParaEnviar[i].id + "/fecha";
           this.crud.edit(pathFecha, this.ListosParaEnviar[i].fecha);
-  
+
           //ganancia esperada
           this.mercancia_esperada += Number(this.dinero_mercancia(this.pedidos[i]));
           this.ganancia_esperada += Number(this.gananciaPedido(this.pedidos[i]));
@@ -428,7 +428,7 @@ export class PedidosPage {
     } catch (error) {
       return 0;
     }
-    
+
   }
 
   guardar_ganancias_base_de_datos(){
@@ -460,7 +460,7 @@ export class PedidosPage {
         },
         {
           text: 'Aceptar',
-          handler: () => {            
+          handler: () => {
             var i = 0;
             while(i < this.pedidos.length){
               if(this.pedidos[i].estado.slice(0,3) == "G -"){
@@ -486,7 +486,7 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present();     
+    alert.present();
   }
 
   //FUNCIONES PARA CAMBIAR ESTADO DE LOS PEDIDOS NACIONALES (CON OTRO PATH)
@@ -503,7 +503,7 @@ export class PedidosPage {
   conProblemas_nacionales(pedido){
     let path = "/PEDIDOS_NACIONALES/" + pedido.id + "/estado";
     this.crud.edit(path, 'M - ' + pedido.estado.slice(4));
-  } 
+  }
 
   //FUNCIONES PARA EL REDUCE MAP QUE SE HACE EN EL CONTRUCTOR
   precio(item) {
@@ -533,24 +533,24 @@ export class PedidosPage {
       .catch(err => console.log('Error launching dialer', err));
   }
 
-  asignarSantiago(pedido) {    
-    let pathPedido = "/DOMICILIARIOS/USUARIOS/" + 0 + "/PEDIDOS/" + pedido.id;    
-    this.crud.create(pathPedido, pedido);        
+  asignarSantiago(pedido) {
+    let pathPedido = "/DOMICILIARIOS/USUARIOS/" + 0 + "/PEDIDOS/" + pedido.id;
+    this.crud.create(pathPedido, pedido);
   }
 
   asignarOtro(pedido) {
-    let pathPedido = "/DOMICILIARIOS/USUARIOS/" + 1 + "/PEDIDOS/" + pedido.id;    
-    this.crud.create(pathPedido, pedido);        
+    let pathPedido = "/DOMICILIARIOS/USUARIOS/" + 1 + "/PEDIDOS/" + pedido.id;
+    this.crud.create(pathPedido, pedido);
   }
 
   asignarTres(pedido) {
-    let pathPedido = "/DOMICILIARIOS/USUARIOS/" + 2 + "/PEDIDOS/" + pedido.id;    
-    this.crud.create(pathPedido, pedido);        
+    let pathPedido = "/DOMICILIARIOS/USUARIOS/" + 2 + "/PEDIDOS/" + pedido.id;
+    this.crud.create(pathPedido, pedido);
   }
 
   asignarAlejandro(pedido) {
-    let pathPedido = "/DOMICILIARIOS/USUARIOS/" + 3 + "/PEDIDOS/" + pedido.id;    
-    this.crud.create(pathPedido, pedido);        
+    let pathPedido = "/DOMICILIARIOS/USUARIOS/" + 3 + "/PEDIDOS/" + pedido.id;
+    this.crud.create(pathPedido, pedido);
   }
 
   entregado(pedido){
@@ -586,7 +586,7 @@ export class PedidosPage {
       ]
     });
     alert.present();
-        
+
   }
 
 
@@ -620,10 +620,10 @@ export class PedidosPage {
       ]
     });
     alert.present();
-        
+
   }
 
-  borrar(pedido){    
+  borrar(pedido){
     let alert = this.alertCtrl.create({
       title: 'Confirmar Borrar',
       message: 'Estás seguro de borrar este pedido?',
@@ -647,10 +647,10 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present();  
+    alert.present();
   }
 
-  borrarNacional(pedido){    
+  borrarNacional(pedido){
     let alert = this.alertCtrl.create({
       title: 'Confirmar Borrar',
       message: 'Estás seguro de borrar este pedido?',
@@ -674,7 +674,7 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present();  
+    alert.present();
   }
 
   sumarDosmil1(totalBarbero, totalDomiciliario){
@@ -700,7 +700,7 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present();      
+    alert.present();
   }
   sumarDosmil2(totalBarbero, totalDomiciliario){
     let alert = this.alertCtrl.create({
@@ -725,8 +725,8 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present(); 
-    
+    alert.present();
+
   }
   sumarDosmil3(totalBarbero, totalDomiciliario){
     let alert = this.alertCtrl.create({
@@ -751,7 +751,7 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present();      
+    alert.present();
   }
 
   sumarCuatromilquinientos1(totalBarbero, totalDomiciliario){
@@ -777,7 +777,7 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present();     
+    alert.present();
   }
   sumarCuatromilquinientos2(totalBarbero, totalDomiciliario){
     let alert = this.alertCtrl.create({
@@ -793,7 +793,7 @@ export class PedidosPage {
         },
         {
           text: 'Sumar',
-          handler: () => {            
+          handler: () => {
             this.totalBarbero2 -= 4500;
             this.totalDomiciliario2 += 4500;
             this.crud.edit(this.pathDataDomiciliario2, this.totalDomiciliario2);
@@ -802,7 +802,7 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present();     
+    alert.present();
   }
   sumarCuatromilquinientos3(totalBarbero, totalDomiciliario){
     let alert = this.alertCtrl.create({
@@ -827,7 +827,7 @@ export class PedidosPage {
         }
       ]
     });
-    alert.present();     
+    alert.present();
   }
 
 
@@ -872,7 +872,7 @@ export class PedidosPage {
                 pathBarbero = "/DOMICILIARIOS/USUARIOS/3/TOTAL_DIA/" + "barbero";
                 pathPedidos = "/DOMICILIARIOS/USUARIOS/3/PEDIDOS/";
                 break;
-            
+
               default:
                 error = true;
                 break;
@@ -888,12 +888,12 @@ export class PedidosPage {
               } catch (error) {
                 throw new Error('No hay pedidos');
               }
-            }  
+            }
           }
         }
       ]
     });
-    alert.present();     
+    alert.present();
   }
 
   listaFaltantes(){
@@ -924,7 +924,7 @@ export class PedidosPage {
         pedidos_de_hoy.push(this.pedidos[g]);
       }
     }
-    
+
 
     for(var i = 0; i < pedidos_de_hoy.length;i++){
       for(var j= 0; j < pedidos_de_hoy[i].productos.length;j++){
@@ -987,8 +987,8 @@ export class PedidosPage {
                     }
                 }
               }
-              
- 
+
+
             }else{
               //NO ES UN COMBO EL PRODUCTO QUE TENEMOS, SOLO ACOMULAMOS SU CANTIDAD
               var cantidadPromo = 0; //INICIALMENTE EL PRODUCTO NO ES UNA PROMO
@@ -1035,7 +1035,7 @@ export class PedidosPage {
     let alert = this.alertCtrl.create({
        title: "¡Pedidos para hoy!",
        message: texto_alerta,
-       buttons: [ 
+       buttons: [
          {
          text: "copiar",
          handler: () => {
@@ -1069,7 +1069,7 @@ export class PedidosPage {
       this.crud.delete(pathPedido);
     }catch (error) {
       throw new Error(error);
-    }    
+    }
   }
 
   restar_productos_bodega(pedido){
@@ -1158,7 +1158,7 @@ export class PedidosPage {
           this.crud.edit(path_a_restar, nuevo_valor_producto);
         }
       }
-     
+
     } catch (error) {
       console.log(error);
     }

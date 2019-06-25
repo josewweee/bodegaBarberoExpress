@@ -35,7 +35,7 @@
         <ion-icon name="trash"></ion-icon>&nbsp;
         LIMPIAR
     </button>
-  </ion-item>   
+  </ion-item>
   <ion-item>
       <ion-title>MENSAJERO 1</ion-title>
       <ion-item>BARBERO: ${{totalBarbero1 | number: '1.0-0'}}</ion-item>
@@ -53,7 +53,7 @@
           <ion-icon name="trash"></ion-icon>&nbsp;
           LIMPIAR
       </button>
-  </ion-item> 
+  </ion-item>
  <!--  <ion-item>
     <ion-title>HECTOR</ion-title>
       <ion-item>BARBERO 2: ${{totalBarbero2 | number: '1.0-0'}}</ion-item>
@@ -98,7 +98,7 @@
               <img style="background-size: cover; width: 70px; height: 70px; display: block; margin:auto;" src="./../../assets/imgs/cartUser.jpg"/>
               <ion-card-content (click)="irDetallePedido(pedido)">
                 <ion-card-title style="text-transform: uppercase; text-align: center; user-select: text;">
-                  {{pedido.usuario.nombre}}                    
+                  {{pedido.usuario.nombre}}
                 </ion-card-title>
               </ion-card-content>
               <div  style="text-align: center">
@@ -117,27 +117,27 @@
                 <button ion-button color="ok" (click)="despachado(pedido)">
                     <ion-icon name="jet"></ion-icon>&nbsp;
                 </button>
-              
+
               </div>
-            
+
               <ion-card-content (click)="irDetallePedido(pedido)">
                 <hr>
                 <b>TELÉFONO: </b> {{pedido.usuario.telefono}}
-                <hr>                               
+                <hr>
                 <b>MUNICIPIO: </b> {{pedido.municipio}}
-                <hr> 
+                <hr>
                 <b>DIRECCIÓN: </b> {{pedido.direccion}}
                 <hr>
                 <b>BARRIO: </b> {{pedido.barrio}}
                 <hr>
                 <b>OBSERVACIONES: </b> {{pedido.observaciones}}
                 <hr>
-                <b>ESTADO: </b>{{pedido.estado}}                               
+                <b>ESTADO: </b>{{pedido.estado}}
                 <hr>
                 <h2>TOTAL: ${{pedido.total | number: '1.0-0'}}</h2>
               </ion-card-content>
 
-              <a href="https://api.whatsapp.com/send?phone=57{{pedido.usuario.telefono}}&text=Buen día *{{pedido.usuario.nombre}}* este es un mensaje automático, te hablamos de Barbero Express. Tenemos un pedido a tu nombre para ser entregado *entre las 2:000 P.M y las 8:00 P.M*. El total de tu pedido es *${{pedido.total}}*. Gracias por preferir *barberoexpress.com*. Cualquier inquietud no dudes en escribirnos.&source=&data=" target="_blank">
+              <a href="https://api.whatsapp.com/send?phone=57{{pedido.usuario.telefono}}&text=Buen día *{{pedido.usuario.nombre}}* este es un mensaje automático, te hablamos de Barbero Express. Tenemos un pedido a tu nombre para ser entregado *entre las 2:000 P.M y las 8:00 P.M*. El total de tu pedido es *${{pedido.total}}*, cuando recibas tu pedido, porfavor confirmanos de ser posible con una foto de los productos. Gracias por preferir *barberoexpress.com*. Cualquier inquietud no dudes en escribirnos. *RECUERDA QUE EL MENSAJERO TE LLAMARA ANTES DE IR, SI NO LE RESPONDES EL MENSAJERO NO IRA Y TU PEDIDO QUEDARA PARA EL DIA SIGUIENTE.*&source=&data=" target="_blank">
                 <button ion-button color="ok">
                     <ion-icon name="logo-whatsapp"></ion-icon>&nbsp;CONFIRMAR
                 </button>
@@ -146,8 +146,8 @@
                 <button ion-button color="ok">
                   <ion-icon name="clock"></ion-icon>&nbsp;MAÑANA
                 </button>
-              </a>             
-              <!-- <a href="https://api.whatsapp.com/send?phone=57{{pedido.usuario.telefono}}&text=Buen día {{pedido.usuario.nombre}}, te hablamos de Barbero Express. Tu pedido acaba de salir con el mensajero. Recuerda que debe estar llegando de 2:00 P.M a 6:00 P.M. Y el total del pedido es *${{pedido.total}}*. Confirmanos cuando lo recibas por favor. Gracias por tu compra!!!&source=&data=" target="_blank">MENSAJERO EN CAMINO</a>     -->          
+              </a>
+              <!-- <a href="https://api.whatsapp.com/send?phone=57{{pedido.usuario.telefono}}&text=Buen día {{pedido.usuario.nombre}}, te hablamos de Barbero Express. Tu pedido acaba de salir con el mensajero. Recuerda que debe estar llegando de 2:00 P.M a 6:00 P.M. Y el total del pedido es *${{pedido.total}}*. Confirmanos cuando lo recibas por favor. Gracias por tu compra!!!&source=&data=" target="_blank">MENSAJERO EN CAMINO</a>     -->
               <button ion-button color="ok" (click)="llamar(pedido.usuario.telefono)">
                 <ion-icon name="call"></ion-icon>&nbsp;LLAMAR
               </button>
@@ -157,7 +157,7 @@
              <button ion-button color="ok" (click)="asignarOtro(pedido)">
                 <ion-icon name="bicycle"></ion-icon>&nbsp;MENSAJERO 1
               </button>
-              
+
               <button ion-button color="ok" (click)="asignarAlejandro(pedido)">
                 <ion-icon name="bicycle"></ion-icon> &nbsp;MENSAJERO 3
               </button>
@@ -165,7 +165,7 @@
                 <ion-icon name="trash"></ion-icon>
                 &nbsp;BORRAR
               </button>
-          
+
               <button ion-button color="ok" (click)="entregado(pedido)">
                 <ion-icon name="checkmark-circle-outline"></ion-icon>
                 &nbsp;ENTREGADO
@@ -175,7 +175,7 @@
                 &nbsp;ENVIADO
               </button> -->
             <!--   <button (click)="bord=!bord">border {{bord ? 'off' : 'on'}}</button> -->
-            </ion-card>                                          
+            </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -186,7 +186,7 @@
           <ion-icon name="add"></ion-icon>
       </ion-fab-button>
   </ion-fab> -->
-  
+
   <div style="text-align: center">
     <ion-card>
     <button ion-button color="ok" (click)="GenerarLista()">
@@ -217,55 +217,55 @@
                     <img style="background-size: cover; width: 70px; height: 70px; display: block; margin:auto;" src="./../../assets/imgs/mapaColombia.png"/>
                     <ion-card-content (click)="irDetallePedido(pedido)">
                       <ion-card-title style="text-transform: uppercase; text-align: center;">
-                        {{pedido.usuario.nombre}}                    
+                        {{pedido.usuario.nombre}}
                       </ion-card-title>
                     </ion-card-content>
                       <div  style="text-align: center">
                           <button ion-button color="ok" (click)="okey_nacionales(pedido)">
                               <ion-icon name="md-thumbs-up"></ion-icon> &nbsp;
                           </button>
-        
+
                           <button ion-button color="ok" (click)="conProblemas_nacionales(pedido)">
                                 <ion-icon name="md-thumbs-down"></ion-icon> &nbsp;
                           </button>
-        
+
                           <button ion-button color="ok" (click)="enProceso_nacionales(pedido)">
                                   <ion-icon name="md-help"></ion-icon> &nbsp;
                           </button>
                       </div>
-                    
+
                       <ion-card-content (click)="irDetallePedido(pedido)">
                       TELÉFONO: {{pedido.usuario.telefono}}
-                      <hr>                               
+                      <hr>
                       MUNICIPIO: {{pedido.municipio}}
-                      <hr> 
+                      <hr>
                       DIRECCIÓN: {{pedido.direccion}}
                       <hr>
                       OBSERVACIONES: {{pedido.observaciones}}
                       <hr>
-                      ESTADO: {{pedido.estado}}                               
+                      ESTADO: {{pedido.estado}}
                       <hr>
                       <h2>TOTAL: ${{pedido.total | number: '1.0-0'}}</h2>
                     </ion-card-content>
-                                             
-                  
+
+
                     <button ion-button color="ok" (click)="confirmarNacional(pedido)">
-                      <a href="https://api.whatsapp.com/send?phone=57{{pedido.usuario.telefono}}&text=Buen día {{pedido.usuario.nombre}}, te hablamos de Barbero Express. Tenemos un pedido a tu nombre para ser *enviado por interrapidisimo/Servientrega*. El total del pedido es *${{pedido.totalNacional}}*. Dado que el pedido se encuentra fuera de la ciudad de Medellín, *no contamos con pago contra entrega en tu lugar de destino*, recuerda que el flete del envio lo pagas a la hora de recibir el producto. En este caso para poder proceder con el envío, debes realizar previamente el pago del pedido por *Bancolombia-NEQUI* y confirmarnos para proceder con el envío. Gracias por tu compra. Recuerda que puedes encontrarnos en redes sociales y en la aplicación Barbero Express para Android!!!          \n\n\n\n\n\n\n\n  Para el pago necesitas el *número 3505325406*, si te preguntan *código de convenio, es el 63703*. También pueden preguntarte el *tipo de pago*, en este caso debes decir que *es un pago de factura manual*. &source=&data=" target="_blank">
+                      <a href="https://api.whatsapp.com/send?phone=57{{pedido.usuario.telefono}}&text=Buen día {{pedido.usuario.nombre}}, te hablamos de Barbero Express. Tenemos un pedido a tu nombre para ser *enviado por interrapidisimo/Servientrega*. El total del pedido es *${{pedido.totalNacional}}*. Dado que el pedido se encuentra fuera de la ciudad de Medellín, *no contamos con pago contra entrega en tu lugar de destino*, recuerda que el flete del envio lo pagas a la hora de recibir el producto. En este caso para poder proceder con el envío, debes realizar previamente el pago del pedido por *Bancolombia* y confirmarnos para proceder con el envío. Gracias por tu compra. Recuerda que puedes encontrarnos en redes sociales y en la aplicación Barbero Express para Android!!!          \n\n\n\n\n\n\n\n  *Cuenta ahorros Bancolombia: 34295975051*  \n  *Nombre:* Cristian Franco. &source=&data=" target="_blank">
                         <ion-icon name="logo-whatsapp"></ion-icon>&nbsp;CONFIRMAR
                       </a>
                       </button>
-                    
+
                   <a href="https://api.whatsapp.com/send?phone=57{{pedido.usuario.telefono}}&text=Buen día {{pedido.usuario.nombre}}, te hablamos de Barbero Express. Tu pedido acaba de ser despachado. Confirmanos cuando lo recibas por favor. Gracias por tu compra!!!&source=&data=" target="_blank">
                     <button ion-button color="ok">
                         <ion-icon name="md-plane"></ion-icon>&nbsp;ENVIO EN CAMINO
                     </button>
-                  </a> 
+                  </a>
                   <button ion-button color="ok" (click)="llamar(pedido.usuario.telefono)">
                     <ion-icon name="call"></ion-icon>&nbsp;
                     LLAMAR
                   </button>
 
-                  
+
                   <button ion-button color="ok" (click)="borrarNacional(pedido)">
                     <ion-icon name="trash"></ion-icon>&nbsp;
                     BORRAR
@@ -275,12 +275,12 @@
                     ENTREGADO
                   </button>
 
-                </ion-card> 
+                </ion-card>
             </ion-col>
           </ion-row>
         </ion-grid>
   </ion-list>
-  
-  
-    
+
+
+
 </ion-content>
